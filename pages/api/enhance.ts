@@ -19,7 +19,7 @@ export default async function handler(
     '127.0.0.1';
   console.log("User IP:", userIP);
   try {
-    await dailyLimiter.consume(userIP, 1);
+    await dailyLimiter.consume(userIP, 10);
   } catch {
     console.warn("Rate limit exceeded for IP",userIP);
     return res.status(429).json({ message: "Too many requests."})
