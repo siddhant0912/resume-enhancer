@@ -1,3 +1,4 @@
+'use client';
 import ResumeReview from "@/components/ResumeReview";
 import axios from "axios";
 import { useState } from "react";
