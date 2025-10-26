@@ -62,7 +62,7 @@ export default function Home() {
 
   return (
     <div style={{ padding: 30 }}>
-      <h2>Agentic Resume Enhancer (Next.js + TypeScript + Classes)</h2>
+      <h2>AI Resume Enhancer</h2>
       <form onSubmit={handleSubmit}>
         <input type="file" accept=".pdf" onChange={(e) => setFile(e.target.files?.[0] || null)} />
         <textarea
