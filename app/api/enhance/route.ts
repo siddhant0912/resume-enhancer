@@ -1,8 +1,8 @@
-import { Document, Packer, Paragraph, TextRun } from "docx";
 import { Orchestrator } from "@/utils/orchestrator";
 import { dailyLimiter } from "@/utils/ratelimitar";
 import { NextResponse } from "next/server";
 import PDFParser, { Page, Text, TextRun as PDFTextRun } from "pdf2json";
+import { createEnhancedDocx } from "@/utils/docFormatter";
 
 
 async function extractPdfText(buffer: ArrayBuffer): Promise<string> {
@@ -66,20 +66,8 @@ export async function POST(req: Request) {
     );
 
     // Create DOCX
-    const doc = new Document({
-        sections: [
-        {
-            children: rewritten
-            .split("\n")
-            .filter((line) => line.trim() !== "")
-            .map(
-                (line) =>
-                new Paragraph({ children: [new TextRun({ text: line })] })
-            ),
-        },
-        ],
-    });
-    const docBuffer = await Packer.toBuffer(doc);
+    const docBuffer = await createEnhancedDocx(rewritten);
+
     return NextResponse.json({
         enhanced_resume: docBuffer.toString("base64"),
         evaluation,

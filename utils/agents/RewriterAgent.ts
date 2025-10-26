@@ -14,28 +14,34 @@ export class RewriterAgent {
 
   async rewrite(resumeText: string, jobDescription: string): Promise<string> {
   const prompt = `
-    You are an expert resume writer and ATS optimization specialist.
+    You are a professional resume writer and ATS optimization expert.
 
-    Your goal:
-    Enhance the given resume by adding relevant missing keywords and phrases from the job description — while preserving authenticity, readability, and formatting.  
-    The result should look like a professionally written, ATS-friendly Word document.
+    Your task:
+    Enhance and optimize the provided resume to align it with the given job description, ensuring it remains authentic, readable, and ready for Applicant Tracking Systems (ATS).
 
-    Guidelines:
-    1. Do NOT change or delete existing content unless necessary for grammar or clarity.
-    2. Naturally incorporate missing keywords and phrases from the job description into relevant sections 
-      (Summary, Skills, Experience, and Projects).
-    3. Keep the writing tone professional, concise, and realistic.
-    4. Maintain consistent formatting — use clear section headers, bullet points, and spacing.
-    5. Do NOT fabricate experience or achievements not implied in the resume.
-    6. Optimize layout for ATS readability — avoid tables, columns, or images.
-    7. Return the final resume in valid **Word (DOCX) format**, not Markdown or plain text.
-    8. Do not include explanations — only the document content.
+    ### Objectives:
+    - Strengthen the resume by naturally incorporating **relevant keywords and phrases** from the job description.
+    - Improve **clarity, impact, and structure** while maintaining the candidate’s original experience and authenticity.
+    - Ensure the result is **ATS-compliant**, professionally formatted, and ready to export as a **Word (DOCX)** document.
 
-    Resume:
+    ### Strict Guidelines:
+    1. **Preserve authenticity** — Do not invent or exaggerate achievements or roles not implied in the resume.
+    2. **Keep original structure** — Retain all existing sections such as Summary, Skills, Experience, Projects, and Education (if available).
+    3. **Keyword integration** — Seamlessly embed important job-related keywords where relevant, especially in Summary, Skills, and Experience.
+    4. **Language & tone** — Maintain a formal, confident, and concise professional tone suitable for mid-to-senior-level roles.
+    5. **Formatting** — Use plain text structure (headings, bullet points, line breaks). Avoid images, tables, columns, or any non-ATS-friendly elements.
+    6. **Do not output explanations or commentary.**
+    7. The output **must represent the final resume text content**, structured as it should appear in a Word (DOCX) file — not Markdown, not JSON, not annotated text.
+
+    ### Inputs:
+    **Resume:**
     ${resumeText}
 
-    Job Description:
+    **Job Description:**
     ${jobDescription}
+
+    ### Output:
+    Return only the enhanced resume content, ready for direct conversion to a Word (DOCX) document.
   `;
 
     try {
