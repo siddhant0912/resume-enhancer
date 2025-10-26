@@ -1,10 +1,17 @@
-import { formidable, File } from "formidable";
+import { formidable, File, Fields, Files } from "formidable";
 import fs from "fs";
 import { Document, Packer, Paragraph, TextRun } from "docx";
 import { Orchestrator } from "@/utils/orchestrator";
 import { NextApiRequest, NextApiResponse } from "next";
 import { PDFParse } from "pdf-parse";
 import { dailyLimiter } from "@/utils/ratelimitar";
+
+interface ParsedForm {
+  err?:Error
+  fields: Fields<string>;
+  files: Files<string>;
+}
+
 
 export const config = { api: { bodyParser: false } };
 
@@ -27,8 +34,15 @@ export default async function handler(
   try {
     if (req.method === "POST") {
       const form = formidable({});
-      form.parse(req, async (err, fields, files) => {
-        if (err) return res.status(500).send("Error parsing files");
+
+      const { err, fields, files } : ParsedForm =  await new Promise((resolve,reject) => {
+        form.parse(req, (err, fields, files) => {
+          if (err) reject(err);
+          else resolve({ fields, files });
+        });
+      })
+
+      if (err) return res.status(500).send("Error parsing files");
         const jobDescription: string = fields.jobDescription?.[0] || "";
         if (!files?.resume?.[0])
           return res.status(400).send("Resume file is required");
@@ -70,7 +84,7 @@ export default async function handler(
           evaluation,
           analysis,
         });
-      });
+     
     }
   } catch (err) {
     console.error("Error in /api/enhance:", err);
